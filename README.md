@@ -8,7 +8,7 @@ The system is built using **Java Swing** for the graphical user interface and **
 * **Suyash Pandey** (2023UG1100)
 * **Himanshu Raj** (2023UG1092)
 * **Suraj Kumar** (2023UG1106)
-* * **Satyendra Kumar** (2023UG1105)
+* **Satyendra Kumar** (2023UG1105)
 
 ## ✨ Core Features
 1. **Dynamic Dashboard:** Displays real-time hotel occupancy rates and allows the manager to globally revise room tariffs by a specific percentage based on demand.
