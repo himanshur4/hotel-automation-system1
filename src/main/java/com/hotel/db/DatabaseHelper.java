@@ -8,7 +8,7 @@ public class DatabaseHelper {
     // Update these with your local PostgreSQL credentials
     private static final String URL = "jdbc:postgresql://localhost:5432/hotel_db";
     private static final String USER = "postgres";
-    private static final String PASSWORD = "HimanshuPost34";
+    private static final String PASSWORD = "Password";
 
     public static Connection getConnection() {
         Connection conn = null;
