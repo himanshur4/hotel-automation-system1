@@ -1,0 +1,818 @@
+\documentclass[12pt,a4paper]{article}
+
+% ── Packages ──────────────────────────────────────────────────────────────────
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{parskip}
+\usepackage{amsmath}
+\setlength{\headheight}{14pt}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{lastpage}
+
+% ── Colors ────────────────────────────────────────────────────────────────────
+\definecolor{darkblue}{RGB}{31,56,100}
+\definecolor{medblue}{RGB}{46,80,144}
+\definecolor{lightblue}{RGB}{238,242,248}
+\definecolor{tableheadbg}{RGB}{31,56,100}
+\definecolor{rowaltbg}{RGB}{238,242,248}
+\definecolor{hred}{RGB}{192,0,0}
+\definecolor{mred}{RGB}{127,127,0}
+\definecolor{lgreen}{RGB}{0,128,0}
+\definecolor{gray}{RGB}{136,136,136}
+
+% ── Hyperref Setup ────────────────────────────────────────────────────────────
+\hypersetup{
+    colorlinks=true,
+    linkcolor=medblue,
+    urlcolor=medblue,
+    pdftitle={SRS - Hotel Automation Software v1.0},
+    pdfauthor={Project Team}
+}
+
+% ── Section Title Formatting ──────────────────────────────────────────────────
+\titleformat{\section}
+  {\Large\bfseries\color{darkblue}}
+  {\thesection}{1em}{}
+  [\vspace{2pt}\color{medblue}\titlerule[1pt]\vspace{4pt}]
+
+\titleformat{\subsection}
+  {\large\bfseries\color{medblue}}
+  {\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{medblue}}
+  {\thesubsubsection}{1em}{}
+
+% ── Header & Footer ───────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{medblue} Software Requirements Specification}
+\fancyhead[R]{\small\color{gray} Hotel Automation Software}
+\fancyfoot[R]{\small\color{gray} Page \thepage\ of \pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+
+% ── Table Column Types ────────────────────────────────────────────────────────
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+% ── Table Header Macro ────────────────────────────────────────────────────────
+\renewcommand{\thead}[1]{%
+  \cellcolor{tableheadbg}\color{white}\textbf{#1}%
+}
+
+% ── Requirement Box Macro ─────────────────────────────────────────────────────
+\newcommand{\req}[2]{%
+  \noindent\textbf{\color{medblue}#1:} #2\par\smallskip
+}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+% ── COVER PAGE ────────────────────────────────────────────────────────────────
+\thispagestyle{empty}
+\begin{center}
+  \vspace*{3cm}
+  {\Huge\bfseries\color{darkblue} SOFTWARE REQUIREMENTS\\[0.4em] SPECIFICATION}\\[1em]
+  {\LARGE\color{medblue} Hotel Automation Software}\\[3cm]
+
+  \begin{tabular}{|L{4cm}|L{8cm}|}
+    \hline
+    \rowcolor{tableheadbg}
+    \color{white}\textbf{Document Type} & \color{white} Software Requirements Specification (SRS) \\
+    \hline
+    \rowcolor{rowaltbg}
+    \textbf{Subject}           & Software Engineering \\
+    \hline
+    \rowcolor{rowaltbg}
+    \textbf{Subject Code}      & CS3004 \\
+   
+    \hline
+    \rowcolor{rowaltbg}
+    \textbf{Date}              & \today \\
+    \hline
+    \rowcolor{rowaltbg}
+    \textbf{Group Members}     &
+      \begin{tabular}[t]{@{}L{4cm} L{3.5cm}@{}}
+        Suyash Pandey        & : 2023UG1100 \\[3pt]
+        Suraj Kumar          & : 2023UG1106 \\[3pt]
+        Himanshu Raj          & : 2023UG1092 \\[3pt]
+        Satyendra Kumar         & : 2023UG1105 \\
+      \end{tabular} \\
+    \hline
+    \rowcolor{rowaltbg}
+    \textbf{Institution}       & Indian Institute of Information Technology Ranchi, Jharkhand \\
+    \hline
+  \end{tabular}
+\end{center}
+\vfill
+
+\newpage
+
+% ── TABLE OF CONTENTS ─────────────────────────────────────────────────────────
+\thispagestyle{fancy}
+\tableofcontents
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Introduction}
+
+\subsection{Purpose}
+
+This Software Requirements Specification (SRS) document describes the functional and
+non-functional requirements for the \textbf{Hotel Automation Software}. The purpose of
+this document is to provide a comprehensive, unambiguous description of the system's
+behaviour to guide development, testing, and validation of the software.
+
+This software will automate the day-to-day operational activities of a 5-star hotel,
+including room management, guest reservation, catering services, billing, and loyalty
+programme management. The SRS serves as a contractual agreement between stakeholders and
+the development team.
+
+\subsection{Scope}
+
+The Hotel Automation Software is designed to manage the complete operational workflow of a
+5-star hotel, from room allocation and guest check-in through to catering, billing, and
+check-out. The software will:
+
+\begin{itemize}[leftmargin=1.5em]
+  \item Maintain a database of all hotel rooms categorised by bed type (single / double)
+        and amenity type (AC / Non-AC), along with their associated tariffs.
+  \item Allow dynamic revision of room tariffs based on the prevailing occupancy rate,
+        adjusted by a configurable percentage either upward or downward.
+  \item Support advance and walk-in room reservations, subject to real-time room availability.
+  \item Assign unique room numbers and token numbers to accommodated guests and generate
+        apology messages when accommodation is unavailable.
+  \item Record catering orders (food item, quantity, guest token, date and time) entered
+        by the catering services manager.
+  \item Generate itemised bills at check-out, including room charges and catering charges,
+        and print the net balance payable.
+  \item Maintain a frequent-guest identity database and apply applicable discounts to bills.
+\end{itemize}
+
+\noindent The software is \textbf{NOT} intended to:
+
+\begin{itemize}[leftmargin=1.5em]
+  \item Control physical room infrastructure (lighting, HVAC, locks) in real time.
+  \item Handle payroll or HR management for hotel staff.
+  \item Provide travel or tourism booking services beyond hotel accommodation.
+\end{itemize}
+
+\subsection{Definitions, Acronyms, and Abbreviations}
+
+\begin{longtable}{|L{3.5cm}|L{10cm}|}
+  \hline
+  \thead{Term / Acronym} & \thead{Definition} \\
+  \hline
+  \endhead
+  \hline
+  \endfoot
+  \rowcolor{rowaltbg}
+  \textbf{SRS}                      & Software Requirements Specification \\
+  \hline
+  \textbf{AC}                       & Air-Conditioned --- denotes a room equipped with air conditioning \\
+  \hline
+  \rowcolor{rowaltbg}
+  \textbf{Non-AC}                   & Non-Air-Conditioned --- denotes a room without air conditioning \\
+  \hline
+  \textbf{Room Tariff}              & The per-night charge for a specific room, which may vary by room type (single/double, AC/Non-AC) and by season / occupancy rate \\
+  \hline
+  \rowcolor{rowaltbg}
+  \textbf{Occupancy Rate}           & The percentage of hotel rooms that are occupied at a given point in time; used by management to decide tariff adjustments \\
+  \hline
+  \textbf{Token Number}             & A unique identifier assigned to each guest at check-in; used to associate catering orders and other services with the correct guest \\
+  \hline
+  \rowcolor{rowaltbg}
+  \textbf{Advance Reservation}      & A room booking made prior to the guest's arrival date \\
+  \hline
+  \textbf{Walk-in Reservation}      & A room booking made by a guest who arrives at the hotel without a prior booking \\
+  \hline
+  \rowcolor{rowaltbg}
+  \textbf{Receptionist}             & Hotel staff member responsible for recording guest data, assigning rooms, and issuing token numbers \\
+  \hline
+  \textbf{Catering Services Manager} & Hotel staff member responsible for recording food and beverage orders against guest token numbers \\
+  \hline
+  \rowcolor{rowaltbg}
+  \textbf{Frequent Guest}           & A returning guest who has been issued a loyalty identity number and is eligible for special discounts \\
+  \hline
+  \textbf{Identity Number}          & A unique loyalty identifier issued to frequent guests that entitles them to discount benefits \\
+  \hline
+  \rowcolor{rowaltbg}
+  \textbf{GUI}                      & Graphical User Interface \\
+  \hline
+  \textbf{RDBMS}                    & Relational Database Management System --- used to persist room, guest, catering, and billing data \\
+  \hline
+  \rowcolor{rowaltbg}
+  \textbf{SA/SD}                    & Structured Analysis / Structured Design \\
+  \hline
+  \textbf{UML}                      & Unified Modelling Language \\
+  \hline
+\end{longtable}
+
+\subsection{Overview}
+
+The remainder of this document is organised as follows:
+
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{Section 2} provides the overall description of the system, including product
+        perspective, functions, users, constraints, and assumptions.
+  \item \textbf{Section 3} details the specific functional requirements of the system.
+  \item \textbf{Section 4} details the non-functional requirements including performance,
+        usability, reliability, and portability.
+  \item \textbf{Section 5} contains the appendix with a use-case summary, a data
+        dictionary, a traceability matrix, and the revision history.
+\end{itemize}
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Overall Description}
+
+\subsection{Product Perspective}
+
+The Hotel Automation Software is a standalone desktop application implemented in
+\textbf{Java} with a \textbf{Java Swing}-based graphical user interface, backed by a
+relational database for persistent storage of rooms, guests, catering records, and
+billing data. It does not interface with any external reservation portal or payment
+gateway in this version.
+
+The system interacts with the following entities:
+
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{Hotel Manager:} Configures room types, tariffs, and discount policies;
+        reviews occupancy reports and adjusts tariffs.
+  \item \textbf{Receptionist:} Records guest arrival data, processes reservations,
+        assigns rooms and token numbers, and initiates check-out billing.
+  \item \textbf{Catering Services Manager:} Enters food and beverage orders against guest
+        token numbers during the guest's stay.
+  \item \textbf{Guest:} The end beneficiary; interacts with the system indirectly through
+        the receptionist and catering staff.
+\end{itemize}
+
+\subsection{Product Functions}
+
+At a high level, the system shall:
+
+\begin{enumerate}[leftmargin=1.8em]
+  \item Maintain a configurable inventory of rooms classified by bed type and AC type,
+        each with an associated tariff.
+  \item Display the average occupancy rate for any given month to support management
+        tariff decisions.
+  \item Allow the manager to revise room tariffs upward or downward by a specified
+        percentage.
+  \item Accept guest reservation requests (advance or walk-in) with arrival date, advance
+        payment, approximate duration of stay, and room type preference.
+  \item Allocate an available room and assign a unique token number to each accommodated
+        guest; generate an apology message when no suitable room is available.
+  \item Record catering orders (item, quantity, token number, date and time) entered by
+        the catering services manager.
+  \item Generate a complete itemised bill at check-out comprising room charges and
+        catering charges, and display the net balance payable after deducting any advance
+        payment.
+  \item Issue loyalty identity numbers to frequent guests and apply the applicable
+        discount to their bills.
+\end{enumerate}
+
+\subsection{User Classes and Characteristics}
+
+\begin{longtable}{|L{3cm}|L{6cm}|L{4.5cm}|}
+  \hline
+  \thead{User Class} & \thead{Description} & \thead{Privilege Level} \\
+  \hline
+  \endhead
+  \hline
+  \endfoot
+  \rowcolor{rowaltbg}
+  \textbf{Hotel Manager}
+    & Configures the system (rooms, tariffs, discounts) and reviews occupancy and revenue reports.
+    & Administrative access \\
+  \hline
+  \textbf{Receptionist}
+    & Handles guest reservations, room assignments, token issuance, and check-out processing.
+    & Operational access \\
+  \hline
+  \rowcolor{rowaltbg}
+  \textbf{Catering Services Manager}
+    & Records food and beverage orders against guest token numbers.
+    & Catering module access \\
+  \hline
+  \textbf{System Administrator}
+    & Installs and maintains the application and database on hotel workstations.
+    & Configuration and maintenance access \\
+  \hline
+\end{longtable}
+
+\subsection{Operating Environment}
+
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{Platform:} Desktop application (Windows 10+ / Ubuntu 20.04+ / macOS 11+)
+  \item \textbf{Implementation Language:} Java (JDK 8 or above)
+  \item \textbf{User Interface:} Java Swing
+  \item \textbf{Database:} Embedded relational database (e.g., SQLite or Apache Derby)
+  \item \textbf{Minimum RAM:} 512 MB
+  \item \textbf{Minimum Disk Space:} 200 MB (including database storage)
+  \item \textbf{Display:} Minimum 1024 $\times$ 768 resolution
+  \item \textbf{Reference Hardware for Performance Targets:} Intel Core i5 (8th Gen or equivalent), 8 GB RAM, SSD storage
+\end{itemize}
+
+\subsection{Design and Implementation Constraints}
+
+\begin{itemize}[leftmargin=1.5em]
+  \item The system must be implemented entirely in Java.
+  \item The user interface must be developed using Java Swing.
+  \item All persistent data (rooms, guests, catering records, bills) must be stored in a
+        relational database; no flat-file storage shall be used for transactional data.
+  \item The application shall be delivered as a single executable JAR file bundling the
+        embedded database driver.
+  \item No external payment gateway or network connectivity is required in this version.
+  \item Token numbers must be unique across the lifetime of the system, not merely within
+        a single day.
+\end{itemize}
+
+\subsection{Assumptions and Dependencies}
+
+\begin{itemize}[leftmargin=1.5em]
+  \item Room tariffs are defined per room type (bed type $\times$ AC type) and are uniform
+        within a type; individual room-level pricing is not supported in this version.
+  \item Tariff adjustments apply to all rooms of the targeted type simultaneously.
+  \item A guest is uniquely identified by their token number for the duration of their stay;
+        the same guest may receive a new token number on each visit unless recognised as a
+        frequent guest.
+  \item Catering charges are computed from the quantities and unit prices stored in the
+        system at the time of bill generation.
+  \item The system assumes inputs are provided in good faith; basic input validation is
+        required but adversarial inputs are not a primary concern.
+  \item The ``approximate duration of stay'' entered at check-in is for planning purposes
+        only; actual charges are computed from the real check-out date and time.
+\end{itemize}
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Specific Functional Requirements}
+
+\subsection{Room Management Requirements}
+
+\subsubsection{Room Inventory Configuration}
+
+\req{FR-1.1}{The system shall allow the hotel manager to define and maintain a list of
+rooms, each characterised by a unique room number, bed type (single or double), and
+AC type (AC or Non-AC).}
+
+\req{FR-1.2}{The system shall associate a base tariff (per night, in currency units) with
+each combination of bed type and AC type (i.e., up to four tariff categories: single-AC,
+single-Non-AC, double-AC, double-Non-AC).}
+
+\req{FR-1.3}{The system shall track the current availability status of each room
+(\textit{available} or \textit{occupied}).}
+
+\subsubsection{Occupancy Reporting and Tariff Revision}
+
+\req{FR-2.1}{The system shall compute and display the average occupancy rate for any
+given month, defined as:}
+\[
+  \text{Average Occupancy Rate (\%)} =
+  \frac{\text{Total Room-Nights Occupied}}{\text{Total Room-Nights Available}} \times 100
+\]
+
+\req{FR-2.2}{The system shall allow the hotel manager to revise the tariff for any room
+type by specifying a percentage adjustment (positive for upward revision, negative for
+downward revision). The new tariff shall be computed as:}
+\[
+  \text{New Tariff} = \text{Current Tariff} \times \left(1 + \frac{\text{Adjustment \%}}{100}\right)
+\]
+
+\req{FR-2.3}{The system shall store a history of tariff changes (room type, old tariff,
+new tariff, date of change) to support audit and reporting.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Reservation Requirements}
+
+\subsubsection{Guest Data Entry}
+
+\req{FR-3.1}{The system shall allow the receptionist to enter the following data for each
+reservation request:}
+\begin{itemize}[leftmargin=1.5em]
+  \item Guest name
+  \item Arrival date and time
+  \item Approximate duration of stay (in nights)
+  \item Room type required (bed type and AC type)
+  \item Advance payment amount (zero for walk-in guests with no advance)
+  \item Frequent-guest identity number (optional; leave blank if not a frequent guest)
+\end{itemize}
+
+\req{FR-3.2}{The system shall support both advance reservations (made before the arrival
+date) and walk-in reservations (made on the day of arrival).}
+
+\subsubsection{Room Allocation}
+
+\req{FR-4.1}{Upon receiving a reservation request, the system shall check the availability
+of rooms matching the requested type on the requested dates.}
+
+\req{FR-4.2}{If a suitable room is available, the system shall:}
+\begin{itemize}[leftmargin=1.5em]
+  \item Allocate the room with the lowest available room number of the requested type.
+  \item Mark the room as \textit{occupied} for the duration of the stay.
+  \item Assign a unique token number to the guest.
+  \item Display and print the allocated room number and token number to the receptionist.
+\end{itemize}
+
+\req{FR-4.3}{If no suitable room is available, the system shall generate and display an
+apology message to the receptionist indicating the unavailability and the reason (no
+room of the requested type available on the requested dates).}
+
+\req{FR-4.4}{The system shall not double-allocate a room to two overlapping reservations.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Catering Services Requirements}
+
+\req{FR-5.1}{The system shall allow the catering services manager to enter catering orders
+comprising:}
+\begin{itemize}[leftmargin=1.5em]
+  \item Guest token number
+  \item Food item name
+  \item Quantity consumed
+  \item Date and time of consumption
+\end{itemize}
+
+\req{FR-5.2}{The system shall validate that the token number entered corresponds to a
+currently checked-in guest, and shall display an error message if not.}
+
+\req{FR-5.3}{The system shall maintain a menu of food items with associated unit prices,
+configurable by the hotel manager.}
+
+\req{FR-5.4}{The system shall accumulate all catering orders for a guest throughout their
+stay and associate them with the guest's token number for billing purposes.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Billing and Check-Out Requirements}
+
+\req{FR-6.1}{When a guest prepares to check out, the receptionist shall initiate the
+check-out process by entering the guest's token number.}
+
+\req{FR-6.2}{The system shall compute the total room charge as:}
+\[
+  \text{Room Charge} = \text{Tariff per Night (at time of check-in)} \times \text{Actual Nights Stayed}
+\]
+
+\req{FR-6.3}{The system shall compute the total catering charge as the sum of
+(quantity $\times$ unit price) across all catering orders associated with the guest's
+token number.}
+
+\req{FR-6.4}{The system shall generate and display an itemised bill comprising:}
+\begin{itemize}[leftmargin=1.5em]
+  \item Guest name, room number, token number, check-in and check-out dates
+  \item Itemised room charges (tariff per night $\times$ nights)
+  \item Itemised catering charges (food item, quantity, unit price, subtotal per item)
+  \item Total bill amount (room + catering)
+  \item Advance payment deducted
+  \item Frequent-guest discount deducted (if applicable)
+  \item Net balance payable
+\end{itemize}
+
+\req{FR-6.5}{The system shall print the bill to the system's default printer upon
+receptionist confirmation.}
+
+\req{FR-6.6}{Upon successful check-out, the system shall mark the room as
+\textit{available} from the check-out date.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Frequent-Guest Loyalty Requirements}
+
+\req{FR-7.1}{The system shall maintain a frequent-guest registry storing the guest's name,
+contact information, and a unique system-generated identity number.}
+
+\req{FR-7.2}{The hotel manager shall be able to define the discount percentage applicable
+to frequent guests. The discount shall apply to the total bill (room + catering charges)
+before deducting advance payments.}
+
+\req{FR-7.3}{When a reservation is made using a valid frequent-guest identity number, the
+system shall automatically apply the configured discount at check-out.}
+
+\req{FR-7.4}{The system shall allow the receptionist to enrol a new frequent guest during
+the check-out process, issuing a new identity number that is effective from the next stay.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{User Interface Requirements}
+
+\req{FR-8.1}{The system shall provide a graphical user interface built using Java Swing,
+with separate functional panels for Room Management, Reservations, Catering, Billing,
+and Reports.}
+
+\req{FR-8.2}{The GUI shall provide input forms for all reservation parameters described
+in FR-3.1, with field-level validation and descriptive error messages.}
+
+\req{FR-8.3}{The GUI shall provide a \textbf{Check Availability} button that queries room
+availability before committing a reservation.}
+
+\req{FR-8.4}{The GUI shall provide a \textbf{Confirm Reservation} button to finalise the
+allocation and issue the token number.}
+
+\req{FR-8.5}{The GUI shall provide a \textbf{Check-Out} button that initiates bill
+generation for the guest identified by the entered token number.}
+
+\req{FR-8.6}{The GUI shall provide a \textbf{Print Bill} button that sends the generated
+bill to the system's default printer.}
+
+\req{FR-8.7}{The GUI shall provide an \textbf{Adjust Tariff} panel accessible to the hotel
+manager, allowing percentage-based tariff revisions per room type.}
+
+\req{FR-8.8}{The GUI shall provide an \textbf{Occupancy Report} panel displaying the
+average occupancy rate for a user-selected month.}
+
+\req{FR-8.9}{The system shall validate all user inputs before processing and display
+specific, actionable error messages for each invalid input field.}
+
+\req{FR-8.10}{All input fields shall carry descriptive labels and tooltips explaining
+expected values, formats, and valid ranges.}
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Non-Functional Requirements}
+
+\subsection{Performance Requirements}
+
+\begin{longtable}{|L{1.8cm}|L{3cm}|L{5.5cm}|L{3cm}|}
+  \hline
+  \thead{ID} & \thead{Requirement} & \thead{Description} & \thead{Metric} \\
+  \hline
+  \endhead
+  \hline
+  \endfoot
+  \rowcolor{rowaltbg}
+  \textbf{NFR-P1} & Query Response
+    & Room availability queries and occupancy reports shall return results promptly on the
+      reference hardware (Intel Core i5 8th Gen, 8 GB RAM) for a hotel with up to 500 rooms
+      and 5 years of historical data.
+    & $<$ 2 seconds \\
+  \hline
+  \textbf{NFR-P2} & Bill Generation
+    & Generating and displaying the itemised check-out bill shall complete quickly,
+      regardless of the number of catering line items.
+    & $<$ 3 seconds \\
+  \hline
+  \rowcolor{rowaltbg}
+  \textbf{NFR-P3} & UI Responsiveness
+    & The GUI shall remain responsive during all database operations (operations execute
+      on a background thread).
+    & No EDT freeze $>$ 500\,ms \\
+  \hline
+  \textbf{NFR-P4} & Startup Time
+    & The application shall start and be ready for user input promptly after launch,
+      including database initialisation.
+    & $<$ 5 seconds \\
+  \hline
+\end{longtable}
+
+\subsection{Usability Requirements}
+
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{NFR-U1:} The system shall provide a user interface that requires no
+        programming knowledge to operate.
+  \item \textbf{NFR-U2:} All input fields shall have descriptive labels and tooltips
+        explaining expected values, formats, and valid ranges (see also FR-8.10).
+  \item \textbf{NFR-U3:} Error messages shall be specific, identifying the offending
+        field and the corrective action required.
+  \item \textbf{NFR-U4:} Billing output shall be presented in a clearly formatted,
+        itemised layout readable without domain expertise.
+  \item \textbf{NFR-U5:} A first-time receptionist with basic computer skills shall be
+        able to complete a reservation and check-out within 10 minutes without consulting
+        documentation.
+\end{itemize}
+
+\subsection{Reliability Requirements}
+
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{NFR-R1:} The system shall not crash or produce erroneous results for any
+        valid input combination.
+  \item \textbf{NFR-R2:} The system shall handle all boundary conditions gracefully,
+        including zero available rooms, a guest with no catering orders, and a stay of
+        zero nights.
+  \item \textbf{NFR-R3:} No two guests shall be allocated the same room for any
+        overlapping date range.
+  \item \textbf{NFR-R4:} All financial calculations (tariff application, discount, net
+        balance) shall be accurate to two decimal places.
+  \item \textbf{NFR-R5:} The system shall preserve all reservation and billing records
+        across application restarts; no transactional data shall be lost due to an
+        unexpected shutdown after the transaction has been committed to the database.
+\end{itemize}
+
+\subsection{Maintainability Requirements}
+
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{NFR-M1:} The source code shall follow standard Java coding conventions
+        (Oracle Code Conventions) and every public class and method shall have a Javadoc
+        comment.
+  \item \textbf{NFR-M2:} The codebase shall be structured in a modular manner with clear
+        separation between: database access layer, business logic, and UI components.
+  \item \textbf{NFR-M3:} Adding a new room type or a new food item shall require only
+        data-level changes (inserts into the room-type or menu table) with no modification
+        to business logic code.
+\end{itemize}
+
+\subsection{Portability Requirements}
+
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{NFR-PO1:} The software shall run on any platform supporting Java Runtime
+        Environment (JRE 8 or above), including Windows 10+, Ubuntu 20.04+, and macOS 11+.
+  \item \textbf{NFR-PO2:} The application shall be packaged as a single executable JAR
+        file bundling the embedded database driver, requiring no external installation.
+  \item \textbf{NFR-PO3:} The software shall not depend on any operating-system-specific
+        libraries or absolute file paths.
+\end{itemize}
+
+\subsection{Security Requirements}
+
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{NFR-S1:} The application shall support role-based access control, ensuring
+        that catering staff cannot access billing or tariff management functions, and
+        receptionists cannot access system configuration.
+  \item \textbf{NFR-S2:} Exported or printed bills shall contain only guest transaction
+        data and shall not include any system-level information (OS version, database
+        paths, internal IDs).
+  \item \textbf{NFR-S3:} Input validation (FR-8.9) shall prevent the application from
+        entering an undefined or erroneous state due to malformed, empty, or out-of-range
+        inputs.
+  \item \textbf{NFR-S4:} Guest personal data (name, contact details) shall be stored only
+        in the local database and shall not be transmitted to any external system.
+\end{itemize}
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Appendix}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Use-Case Summary}
+\label{sec:usecases}
+
+\begin{longtable}{|L{1.5cm}|L{3cm}|L{3cm}|L{6cm}|}
+  \hline
+  \thead{UC ID} & \thead{Use Case} & \thead{Actor(s)} & \thead{Brief Description} \\
+  \hline
+  \endhead
+  \hline
+  \endfoot
+  \rowcolor{rowaltbg}
+  UC-01 & Make Reservation       & Receptionist        & Guest requests a room; receptionist enters details; system allocates room and issues token. \\
+  \hline
+  UC-02 & Handle No Availability & Receptionist        & No suitable room found; system generates apology message. \\
+  \hline
+  \rowcolor{rowaltbg}
+  UC-03 & Record Catering Order  & Catering Mgr        & Catering manager enters food items against a guest token number. \\
+  \hline
+  UC-04 & Process Check-Out      & Receptionist        & Receptionist initiates check-out; system generates and prints itemised bill. \\
+  \hline
+  \rowcolor{rowaltbg}
+  UC-05 & Adjust Room Tariff     & Hotel Manager       & Manager reviews occupancy report and revises tariff by a percentage. \\
+  \hline
+  UC-06 & View Occupancy Report  & Hotel Manager       & Manager selects a month; system displays average occupancy rate. \\
+  \hline
+  \rowcolor{rowaltbg}
+  UC-07 & Enrol Frequent Guest   & Receptionist        & Receptionist enrols a qualifying guest; system issues a loyalty identity number. \\
+  \hline
+  UC-08 & Apply Loyalty Discount & Receptionist        & Frequent guest's identity number is entered; system applies configured discount at check-out. \\
+  \hline
+\end{longtable}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Data Dictionary}
+\label{sec:datadictionary}
+
+\begin{longtable}{|L{3.5cm}|L{2.5cm}|L{2cm}|L{5.5cm}|}
+  \hline
+  \thead{Attribute} & \thead{Data Type} & \thead{Constraints} & \thead{Description} \\
+  \hline
+  \endhead
+  \hline
+  \endfoot
+  \rowcolor{rowaltbg}
+  \texttt{room\_number}       & Integer    & PK, $\geq 1$       & Unique identifier for each physical room \\
+  \hline
+  \texttt{bed\_type}          & Enum       & \{Single, Double\} & Type of bed in the room \\
+  \hline
+  \rowcolor{rowaltbg}
+  \texttt{ac\_type}           & Enum       & \{AC, Non-AC\}     & Air-conditioning category of the room \\
+  \hline
+  \texttt{tariff\_per\_night} & Decimal    & $> 0$              & Current nightly rate for the room type \\
+  \hline
+  \rowcolor{rowaltbg}
+  \texttt{token\_number}      & Integer    & PK, unique, auto   & System-generated unique guest token \\
+  \hline
+  \texttt{guest\_name}        & String     & Non-empty          & Full name of the guest \\
+  \hline
+  \rowcolor{rowaltbg}
+  \texttt{arrival\_datetime}  & DateTime   & Not null           & Check-in date and time \\
+  \hline
+  \texttt{checkout\_datetime} & DateTime   & $\geq$ arrival     & Actual check-out date and time \\
+  \hline
+  \rowcolor{rowaltbg}
+  \texttt{advance\_paid}      & Decimal    & $\geq 0$           & Amount paid in advance by the guest \\
+  \hline
+  \texttt{identity\_number}   & Integer    & FK (optional)      & Frequent-guest loyalty ID; null if not enrolled \\
+  \hline
+  \rowcolor{rowaltbg}
+  \texttt{food\_item}         & String     & Non-empty          & Name of the food or beverage item ordered \\
+  \hline
+  \texttt{quantity}           & Integer    & $\geq 1$           & Number of units of the food item consumed \\
+  \hline
+  \rowcolor{rowaltbg}
+  \texttt{unit\_price}        & Decimal    & $> 0$              & Price per unit of the food item \\
+  \hline
+  \texttt{order\_datetime}    & DateTime   & Not null           & Date and time the catering order was placed \\
+  \hline
+  \rowcolor{rowaltbg}
+  \texttt{discount\_pct}      & Decimal    & $0 \leq d \leq 100$& Percentage discount applied to frequent guests \\
+  \hline
+\end{longtable}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Requirements Traceability Matrix}
+
+\begin{longtable}{|L{2.5cm}|L{5.5cm}|L{1.8cm}|L{1.8cm}|L{1.8cm}|}
+  \hline
+  \thead{Req.\ ID} & \thead{Requirement Description} & \thead{Priority} & \thead{Module} & \thead{Status} \\
+  \hline
+  \endhead
+  \hline
+  \endfoot
+  \rowcolor{rowaltbg}
+  FR-1.1 -- FR-1.3 & Room inventory, type classification, availability tracking
+    & \textcolor{hred}{\textbf{High}} & Room Mgmt & Pending \\
+  \hline
+  FR-2.1 -- FR-2.3 & Occupancy reporting, tariff revision, change history
+    & \textcolor{hred}{\textbf{High}} & Room Mgmt & Pending \\
+  \hline
+  \rowcolor{rowaltbg}
+  FR-3.1 -- FR-3.2 & Guest data entry, advance and walk-in reservation support
+    & \textcolor{hred}{\textbf{High}} & Reservation & Pending \\
+  \hline
+  FR-4.1 -- FR-4.4 & Room availability check, allocation, token issuance, apology message
+    & \textcolor{hred}{\textbf{High}} & Reservation & Pending \\
+  \hline
+  \rowcolor{rowaltbg}
+  FR-5.1 -- FR-5.4 & Catering order entry, validation, menu management, accumulation
+    & \textcolor{hred}{\textbf{High}} & Catering & Pending \\
+  \hline
+  FR-6.1 -- FR-6.6 & Check-out initiation, room/catering charge computation, itemised bill, print, room release
+    & \textcolor{hred}{\textbf{High}} & Billing & Pending \\
+  \hline
+  \rowcolor{rowaltbg}
+  FR-7.1 -- FR-7.4 & Frequent-guest registry, discount config, discount application, enrolment
+    & \textcolor{mred}{\textbf{Medium}} & Loyalty & Pending \\
+  \hline
+  FR-8.1 -- FR-8.10 & Java Swing GUI, reservation/catering/billing panels, validation
+    & \textcolor{hred}{\textbf{High}} & UI Layer & Pending \\
+  \hline
+  \rowcolor{rowaltbg}
+  NFR-R3 & No double-allocation of rooms for overlapping dates
+    & \textcolor{hred}{\textbf{High}} & Reservation & Pending \\
+  \hline
+  NFR-R4 & Financial calculations accurate to two decimal places
+    & \textcolor{hred}{\textbf{High}} & Billing & Pending \\
+  \hline
+  \rowcolor{rowaltbg}
+  NFR-S1 & Role-based access control for staff user classes
+    & \textcolor{mred}{\textbf{Medium}} & UI Layer & Pending \\
+  \hline
+\end{longtable}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Revision History}
+
+\begin{longtable}{|L{2cm}|L{3cm}|L{4cm}|L{4.5cm}|}
+  \hline
+  \thead{Version} & \thead{Date} & \thead{Author} & \thead{Description} \\
+  \hline
+  \endhead
+  \hline
+  \endfoot
+  \rowcolor{rowaltbg}
+  0.1 & April 2026 & Project Team & Initial Draft \\
+  \hline
+  1.0 & \today     & Project Team & First complete draft; covers room management, reservation, catering, billing, and frequent-guest requirements; non-functional requirements; use-case summary; data dictionary; traceability matrix \\
+  \hline
+\end{longtable}
+
+\vfill
+\begin{center}
+  \color{medblue}\rule{0.6\linewidth}{0.5pt}\\[0.5em]
+  \color{gray}\small\textit{End of Document --- Hotel Automation Software SRS v1.0}
+\end{center}
+
+\end{document}

@@ -1,0 +1,51 @@
+@startuml sequence_C
+title Scenario C: Guest Check-Out with Frequent-Guest Discount
+skinparam shadowing false
+skinparam sequence {
+  ArrowColor                  #1F3864
+  LifeLineBorderColor         #1F3864
+  LifeLineBackgroundColor     #E8F4FC
+  ParticipantBorderColor      #1F3864
+  ParticipantBackgroundColor  #E8F4FC
+}
+
+participant ":Receptionist" as R
+participant ":ProcessCheckOut" as PCO
+participant ":ComputeRoomCharge" as CRC
+participant ":ComputeCateringCharge" as CCC
+participant ":ApplyDiscount" as AD
+participant ":FormatBill" as FB
+participant ":DBAccessLayer" as DB
+
+R -> PCO : checkout(TokenNumber)
+activate PCO
+
+PCO -> DB : query(ReservationRecord)
+DB --> PCO : ReservationRecord
+
+PCO -> CRC : compute(ReservationRecord)
+CRC --> PCO : RoomChargeSubtotal
+
+PCO -> CCC : compute(TokenNumber)
+activate CCC
+CCC -> DB : query(CateringOrders)
+DB --> CCC : OrderList
+CCC --> PCO : CateringChargeSubtotal
+deactivate CCC
+
+PCO -> AD : apply(IdentityNumber, TotalCharge)
+activate AD
+AD -> DB : query(FrequentGuest)
+DB --> AD : DiscountPct
+AD --> PCO : DiscountAmt
+deactivate AD
+
+PCO -> FB : format(Charges, DiscountAmt, AdvancePaid)
+FB --> PCO : Bill
+
+PCO -> DB : update(RoomStatus = available)
+PCO -> DB : update(ReservationRecord = CheckedOut)
+
+PCO --> R : Bill (initiates PrintBill)
+deactivate PCO
+@enduml

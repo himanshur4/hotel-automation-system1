@@ -1,0 +1,59 @@
+@startuml usecase
+' Use Case Diagram --- Hotel Automation Software
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam usecase {
+  BackgroundColor #E8F4FC
+  BorderColor #1F3864
+}
+skinparam actor {
+  BackgroundColor #FFE6CC
+  BorderColor #1F3864
+}
+left to right direction
+
+actor "Hotel Manager" as HM
+actor "Receptionist" as REC
+actor "Catering Services\nManager" as CSM
+actor "Guest" as G <<Secondary>>
+
+rectangle "Hotel Automation Software" {
+  usecase "Configure Room\nInventory" as UC1
+  usecase "Manage Food\nMenu" as UC2
+  usecase "Adjust Room\nTariff" as UC3
+  usecase "View Occupancy\nReport" as UC4
+  
+  usecase "Make\nReservation" as UC5
+  usecase "Check Room\nAvailability" as UC6
+  usecase "Handle No\nAvailability" as UC7
+  usecase "Process\nCheck-Out" as UC10
+  usecase "Apply Loyalty\nDiscount" as UC11
+  usecase "Enrol Frequent\nGuest" as UC12
+
+  usecase "Record Catering\nOrder" as UC8
+  usecase "Validate Token" as UC9
+}
+
+HM --> UC1
+HM --> UC2
+HM --> UC3
+HM --> UC4
+
+REC --> UC5
+REC --> UC10
+REC --> UC12
+
+CSM --> UC8
+
+G ..> REC : interacts
+G ..> CSM : interacts
+
+UC5 ..> UC6 : <<include>>
+UC7 ..> UC5 : <<extend>>
+UC5 ..> UC11 : <<extend>>
+
+UC3 ..> UC4 : <<include>>
+
+UC10 ..> UC11 : <<include>>
+UC8 ..> UC9 : <<include>>
+@enduml

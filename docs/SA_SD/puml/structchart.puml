@@ -1,0 +1,86 @@
+@startuml structchart
+' Structure Chart (transaction-analysis derived)
+' Module boxes connected top-down. Data / flag couples are documented in
+' the accompanying table in the LaTeX report --- they are omitted from
+' the diagram for clarity.
+skinparam shadowing false
+skinparam defaultFontName Helvetica
+skinparam linetype polyline
+skinparam rectangle {
+  BackgroundColor #DBE5F4
+  BorderColor     #1F3864
+  FontColor       #1F3864
+}
+skinparam arrow {
+  Color #1F3864
+}
+
+' Root
+rectangle "HotelController" as root
+
+' Level 1
+rectangle "GetUserInput" as input
+rectangle "DispatchTransaction" as dispatch
+rectangle "PresentOutput" as present
+
+' Level 2 --- Dispatch Branches
+rectangle "ProcessReservation" as res
+rectangle "RecordCateringOrder" as cat
+rectangle "ProcessCheckOut" as cout
+rectangle "AdjustTariff" as tariff
+rectangle "ViewOccupancy" as occ
+rectangle "ManageFrequentGuest" as fg
+
+' Level 3 --- ProcessReservation
+rectangle "ValidateReservation" as vres
+rectangle "CheckAvailability" as cavail
+rectangle "AllocateRoom" as alloc
+rectangle "FetchTariffAtCheckIn" as ftariff
+rectangle "GenerateApology" as gapol
+
+' Level 3 --- ProcessCheckOut
+rectangle "ComputeRoomCharge" as croom
+rectangle "ComputeCateringCharge" as ccat
+rectangle "ApplyDiscount" as adisc
+rectangle "FormatBill" as fbill
+rectangle "PrintBill" as pbill
+
+' Level 3 --- RecordCateringOrder
+rectangle "ValidateToken" as vtok
+
+' Shared utility
+rectangle "DBAccessLayer" as db #FFFAE1
+
+root --> input
+root --> dispatch
+root --> present
+
+dispatch --> res
+dispatch --> cat
+dispatch --> cout
+dispatch --> tariff
+dispatch --> occ
+dispatch --> fg
+
+res --> vres
+res --> cavail
+res --> alloc
+res --> ftariff
+res --> gapol
+
+cout --> croom
+cout --> ccat
+cout --> adisc
+cout --> fbill
+cout --> pbill
+
+cat --> vtok
+
+' Dependencies on DBAccessLayer
+res --> db
+cat --> db
+cout --> db
+tariff --> db
+occ --> db
+fg --> db
+@enduml

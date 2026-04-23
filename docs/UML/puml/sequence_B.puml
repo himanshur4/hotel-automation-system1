@@ -1,0 +1,35 @@
+@startuml sequence_B
+title Scenario B: Reservation Rejected (No Suitable Room)
+skinparam shadowing false
+skinparam sequence {
+  ArrowColor                  #1F3864
+  LifeLineBorderColor         #1F3864
+  LifeLineBackgroundColor     #E8F4FC
+  ParticipantBorderColor      #1F3864
+  ParticipantBackgroundColor  #E8F4FC
+}
+
+participant ":Receptionist" as R
+participant ":ProcessReservation" as PR
+participant ":CheckAvailability" as CA
+participant ":GenerateApology" as GA
+participant ":DBAccessLayer" as DB
+
+R -> PR : reserve(ReservationRequest)
+activate PR
+
+PR -> CA : check(RoomTypePreference, DateRange)
+activate CA
+CA -> DB : query(available rooms)
+DB --> CA : empty list
+CA --> PR : null (NoRoomAvailable)
+deactivate CA
+
+PR -> GA : generate(RoomTypePreference, DateRange)
+activate GA
+GA --> PR : ApologyMessage
+deactivate GA
+
+PR --> R : AllocationResult(ApologyMessage)
+deactivate PR
+@enduml

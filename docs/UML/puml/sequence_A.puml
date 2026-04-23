@@ -1,0 +1,47 @@
+@startuml sequence_A
+title Scenario A: Successful Room Reservation
+skinparam shadowing false
+skinparam sequence {
+  ArrowColor                  #1F3864
+  LifeLineBorderColor         #1F3864
+  LifeLineBackgroundColor     #E8F4FC
+  ParticipantBorderColor      #1F3864
+  ParticipantBackgroundColor  #E8F4FC
+}
+
+participant ":Receptionist" as R
+participant ":ProcessReservation" as PR
+participant ":CheckAvailability" as CA
+participant ":AllocateRoom" as AR
+participant ":FetchTariffAtCheckIn" as FT
+participant ":DBAccessLayer" as DB
+
+R -> PR : reserve(ReservationRequest)
+activate PR
+
+PR -> CA : check(RoomTypePreference, DateRange)
+activate CA
+CA -> DB : query(available rooms)
+DB --> CA : RoomList
+CA --> PR : RoomNumber (lowest available)
+deactivate CA
+
+PR -> AR : allocate(ReservationRequest, RoomNumber)
+activate AR
+AR -> DB : write(ReservationRecord)
+DB --> AR : success
+AR --> PR : TokenNumber
+deactivate AR
+
+PR -> FT : fetchTariff(RoomType)
+activate FT
+FT -> DB : query(CurrentTariff)
+DB --> FT : TariffAtCheckIn
+FT --> PR : TariffAtCheckIn
+deactivate FT
+
+PR -> DB : update(ReservationRecord with TariffAtCheckIn)
+
+PR --> R : AllocationResult(RoomNumber, TokenNumber)
+deactivate PR
+@enduml

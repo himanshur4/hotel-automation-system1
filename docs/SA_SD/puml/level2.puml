@@ -1,0 +1,51 @@
+@startuml level2
+' Level-2 DFD --- explosion of 2.0 Process Reservation
+skinparam shadowing false
+skinparam defaultFontName Helvetica
+skinparam usecase {
+  BackgroundColor #DBE5F4
+  BorderColor     #1F3864
+  FontColor       #1F3864
+}
+skinparam database {
+  BackgroundColor #E2EFDA
+  BorderColor     #1F3864
+  FontColor       #1F3864
+}
+skinparam arrow {
+  Color #1F3864
+}
+
+database "D1\nRoom Inventory" as D1
+database "D2\nTariff Table" as D2
+database "D3\nGuest Reservations" as D3
+
+usecase "**2.1**\nValidate\nReservation Input" as P21
+usecase "**2.2**\nCheck Room\nAvailability" as P22
+usecase "**2.3**\nAllocate Room &\nIssue Token" as P23
+usecase "**2.4**\nGenerate\nApology Message" as P24
+usecase "**2.5**\nFetch Tariff\nat Check-In" as P25
+
+' External processes (shown as usecase with a dashed border via colour)
+usecase "**5.0**\nManage Frequent\nGuests" as P5ext #FFFAE1
+
+' Validation and External check
+P21 --> P5ext : IdentityNumber
+P5ext --> P21 : ValidationResult
+P21 --> P22   : ValidRequest
+
+' Availability and routing
+P22 --> D1  : RoomQuery
+P22 --> D3  : OverlapCheck
+P22 --> P23 : RoomAvailable
+P22 --> P24 : NoRoomAvailable
+
+' Allocation and Write
+P23 --> D1  : MarkOccupied
+P23 --> D3  : WriteReservation
+P23 --> P25 : RoomType
+
+' Tariff Fetch
+P25 --> D2  : CurrentTariffQuery
+P25 --> D3  : UpdateTariffAtCheckIn
+@enduml

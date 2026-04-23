@@ -1,0 +1,134 @@
+@startuml class
+' Class Diagram --- Hotel Automation Software
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam class {
+  BackgroundColor #FFFAE1
+  BorderColor #1F3864
+  HeaderBackgroundColor #FFFAE1
+  ArrowColor #1F3864
+}
+hide empty members
+
+class HotelController {
+  --
+  + start()
+  + login(userClass)
+  + dispatchEvent(e)
+}
+
+class DispatchTransaction {
+  --
+  + handleReservation(req)
+  + handleCatering(req)
+  + handleCheckOut(req)
+  + handleTariffAdjust(req)
+  + handleOccupancy(req)
+  + handleFrequentGuest(req)
+}
+
+class ProcessReservation {
+  --
+  + execute(req)
+}
+
+class ProcessCheckOut {
+  --
+  + execute(token)
+}
+
+class RecordCateringOrder {
+  --
+  + execute(order)
+}
+
+class ManageFrequentGuest {
+  --
+  + enrol(data)
+  + lookup(id)
+}
+
+class DBAccessLayer {
+  --
+  + query(q)
+  + write(obj)
+}
+
+class Room {
+  - number : int
+  - status : String
+}
+
+class RoomType {
+  - bedType : String
+  - acType : String
+}
+
+class Tariff {
+  - currentTariff : double
+}
+
+class TariffChangeEntry {
+  - oldTariff : double
+  - newTariff : double
+  - changeDate : Date
+}
+
+class Reservation {
+  - token : int
+  - guestName : String
+  - arrival : Date
+  - duration : int
+  - advance : double
+}
+
+class CateringOrder {
+  - item : String
+  - qty : int
+  - date : Date
+}
+
+class FrequentGuest {
+  - identityNumber : int
+  - discountPct : double
+}
+
+class Bill {
+  - netBalance : double
+}
+
+class RoomChargeLineItem {
+  - subtotal : double
+}
+
+class CateringLineItem {
+  - subtotal : double
+}
+
+' ── Composition (filled diamond, *--) ────────────────────────────────────────
+HotelController "1" *-- "1" DispatchTransaction
+HotelController "1" *-- "1" DBAccessLayer
+DispatchTransaction "1" *-- "1" ProcessReservation
+DispatchTransaction "1" *-- "1" ProcessCheckOut
+DispatchTransaction "1" *-- "1" RecordCateringOrder
+DispatchTransaction "1" *-- "1" ManageFrequentGuest
+Bill "1" *-- "1..*" RoomChargeLineItem
+Bill "1" *-- "0..*" CateringLineItem
+
+' ── Aggregation (open diamond, o--) ──────────────────────────────────────────
+Reservation "1" o-- "0..*" CateringOrder
+RoomType "1" o-- "0..*" TariffChangeEntry
+
+' ── Association ──────────────────────────────────────────────────────────────
+Room "*" --> "1" RoomType : typed_as
+RoomType "1" --> "1" Tariff : priced_by
+Reservation "*" --> "1" Room : assigned_to
+Reservation "*" --> "0..1" FrequentGuest : linked_to
+
+' ── Dependency ───────────────────────────────────────────────────────────────
+ProcessReservation ..> DBAccessLayer : uses
+ProcessCheckOut ..> DBAccessLayer : uses
+RecordCateringOrder ..> DBAccessLayer : uses
+ManageFrequentGuest ..> DBAccessLayer : uses
+@enduml

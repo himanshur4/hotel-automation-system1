@@ -1,0 +1,19 @@
+@startuml state_room
+title Room State-Chart
+skinparam shadowing false
+skinparam state {
+  BackgroundColor      #E2EFDA
+  BorderColor          #1F3864
+  ArrowColor           #1F3864
+  FontColor            #1F3864
+  StartColor           #1F3864
+  EndColor             #1F3864
+}
+
+[*] --> available
+state available : unoccupied and ready
+state occupied : assigned to active reservation
+
+available --> occupied : allocate() [FR-4.2]
+occupied --> available : checkOut() [FR-6.6]
+@enduml

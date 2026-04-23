@@ -1,0 +1,26 @@
+@startuml state_controller
+title HotelController State-Chart
+skinparam shadowing false
+skinparam state {
+  BackgroundColor      #E2EFDA
+  BorderColor          #1F3864
+  ArrowColor           #1F3864
+  FontColor            #1F3864
+  StartColor           #1F3864
+  EndColor             #1F3864
+}
+
+[*] --> AwaitingLogin
+state AwaitingLogin : User class authentication
+state ManagerActive : Configuration & Reports panels enabled
+state ReceptionistActive : Reservation & Billing panels enabled
+state CateringActive : Menu & Orders panels enabled
+
+AwaitingLogin --> ManagerActive : login(HotelManager)
+AwaitingLogin --> ReceptionistActive : login(Receptionist)
+AwaitingLogin --> CateringActive : login(CateringManager)
+
+ManagerActive --> AwaitingLogin : logout()
+ReceptionistActive --> AwaitingLogin : logout()
+CateringActive --> AwaitingLogin : logout()
+@enduml

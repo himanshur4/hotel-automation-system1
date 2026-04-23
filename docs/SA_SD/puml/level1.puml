@@ -1,0 +1,73 @@
+@startuml level1
+' Level-1 DFD --- six cooperating processes + six data stores
+skinparam shadowing false
+skinparam defaultFontName Helvetica
+skinparam rectangle {
+  BackgroundColor #FFE6CC
+  BorderColor     #1F3864
+  FontColor       #1F3864
+}
+skinparam usecase {
+  BackgroundColor #DBE5F4
+  BorderColor     #1F3864
+  FontColor       #1F3864
+}
+skinparam database {
+  BackgroundColor #E2EFDA
+  BorderColor     #1F3864
+  FontColor       #1F3864
+}
+skinparam arrow {
+  Color #1F3864
+}
+
+rectangle "Hotel\nManager" as HM
+rectangle "Receptionist" as REC
+rectangle "Catering\nServices\nManager" as CSM
+
+usecase "**1.0**\nManage Room\nInventory" as P1
+usecase "**2.0**\nProcess\nReservation" as P2
+usecase "**3.0**\nRecord\nCatering Order" as P3
+usecase "**4.0**\nGenerate\nBill" as P4
+usecase "**5.0**\nManage Frequent\nGuests" as P5
+usecase "**6.0**\nManage Access\nControl" as P6
+
+database "D1\nRoom Inventory" as D1
+database "D2\nTariff Table" as D2
+database "D3\nGuest Reservations" as D3
+database "D4\nCatering Orders" as D4
+database "D5\nFrequent Guest Registry" as D5
+database "D6\nMenu" as D6
+
+' External flows
+HM --> P1 : RoomConfig, MenuConfig,\nTariffAdjustment, OccupancyQuery
+P1 --> HM : OccupancyReport
+
+REC --> P2 : ReservationRequest
+P2 --> REC : AllocationResult
+REC --> P4 : CheckOutRequest
+P4 --> REC : Bill
+
+CSM --> P3 : CateringOrder
+
+' Internal flows to Data Stores
+P1 --> D1 : RoomRecord,\nAvailabilityStatus
+P1 --> D2 : TariffRecord
+P1 --> D6 : MenuConfig
+P1 --> D3 : OccupancyCheck
+
+P2 --> D1 : Query/Update Status
+P2 --> D2 : TariffQuery
+P2 --> D3 : ReservationRecord
+
+P3 --> D3 : ValidateToken
+P3 --> D6 : PriceLookup
+P3 --> D4 : OrderRecord
+
+P4 --> D3 : Fetch/Update Record
+P4 --> D4 : FetchOrders
+P4 --> D1 : MarkAvailable
+P4 --> D5 : DiscountLookup
+
+P5 --> D5 : EnrolmentData
+@enduml
