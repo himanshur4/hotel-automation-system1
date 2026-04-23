@@ -7,10 +7,7 @@ The system is built using **Java Swing** for the graphical user interface and **
 ## 👥 Team Members
 * **Suyash Pandey** (2023UG1100)
 * **Suraj Kumar** (2023UG1106)
-<<<<<<< HEAD
 * **Himanshu Raj** (2023UG1092)
-=======
->>>>>>> 7a5b5f401248033472ea5d2e401c46a0850a36b3
 * **Satyendra Kumar** (2023UG1105)
 
 ## ✨ Core Features
@@ -29,7 +26,6 @@ The system is built using **Java Swing** for the graphical user interface and **
 ## 🏗️ Project Architecture (MVC)
 The codebase is strictly modularized into distinct layers as derived from our Transaction Analysis (SA/SD):
 
-<<<<<<< HEAD
 ```text
 src/main/java/com/hotel/
 ├── app/                  # Application Entry Point (Main.java)
@@ -38,7 +34,9 @@ src/main/java/com/hotel/
 ├── logic/                # Core Business Logic (Booking, Checkout, Billing, Admin math)
 ├── model/                # Data Transfer Objects (Room, Reservation, CateringOrder)
 └── ui/                   # Java Swing Panels (Reception, Catering, Checkout, Admin)
-=======
+
+```
+
 ## 🚀 Setup & Installation Instructions
 
 ### 1. Database Configuration
@@ -55,4 +53,3 @@ src/main/java/com/hotel/
 
 ### 3. Execution
 Run the `Main.java` file located in `src/main/java/com/hotel/Main.java`. Maven will automatically resolve the required PostgreSQL JDBC driver, and the Swing GUI will launch.
->>>>>>> 7a5b5f401248033472ea5d2e401c46a0850a36b3
